@@ -1,0 +1,29 @@
+name: Quality
+
+on:
+  pull_request
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v3
+      - run: |
+          set -x
+
+          if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+              exit 1
+          fi
+
+          go vet ./...
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v3
+      - run: |
+          set -x
+
+          go test ./...
